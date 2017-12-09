@@ -1,0 +1,11 @@
+[2017-12-11 15:56:15] - Abertura da Porta OK
+[2017-12-11 15:35:28] - Abertura da Porta OK
+[2017-12-11 14:47:25] - Abertura da Porta ok
+[2017-12-11 14:47:15] - Abertura da Porta NAO
+[2017-12-11 14:40:16] - Abertura da Porta OK
+[2017-12-11 14:03:57] - Abertura da Porta OK
+[2017-12-11 13:32:24] - Abertura da Porta OK
+[2017-12-11 13:30:41] - Abertura da Porta NAO
+[2017-12-11 12:45:39] - Abertura da Porta OK
+[2017-12-11 11:00:52] - Abertura da Porta OK
+[2017-12-11 10:15:23] - Abertura da Porta OK
