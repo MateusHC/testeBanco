@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+//import java.util.GreagorianCalendar;
+import java.text.SimpleDateFormat;
 
 public class testeBanco {
 
@@ -27,10 +30,13 @@ public class testeBanco {
 		    ArrayList<String> linhas = new ArrayList<String>();
 		    while((data = reader.readLine()) != null) {
 			    if (data != null) {
-				    linhas.add(data);
+			    	
+			    	if (checarEntradas(data)) {
+				        linhas.add(data);
+			    	}
 			    }
 		    }
-		    checarEntradas(linhas);
+			System.out.println("Numero de entradas validas: " + linhas.size());
 		    fileReader.close();
 		    reader.close();
 		}
@@ -47,24 +53,46 @@ public class testeBanco {
 		
 		return true;
 	}
-
-	public void checarEntradas(ArrayList<String> entradas) {
+	public boolean checarEntradas(String entrada) {
 		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE,00);
+		calendar.set(Calendar.SECOND, 00);
 
-		for (int i = 0; i < entradas.size(); i++) {
-			String linha = entradas.get(i);
-			linha = linha.replace("[", "");
-			String[] linhaSplit = linha.split("]");
-			String data = linhaSplit[0].split(" ")[0];
-			String horario = linhaSplit[0].split(" ")[1];
-			String validade = linhaSplit[1];
+		String linha = entrada;
+		linha = linha.replace("[", "");
+		String[] linhaSplit = linha.split("]");
+		String data = linhaSplit[0].split(" ")[0];
+		String horario = linhaSplit[0].split(" ")[1];
+		String validade = linhaSplit[1].replace(" - ", "");
 
+        calendar.set(Integer.parseInt(data.split("-")[0]), Integer.parseInt(data.split("-")[1]), Integer.parseInt(data.split("-")[2]));
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        Date abertura = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        Date fechamento = calendar.getTime();
 			
-			String ddd = data.split("-")[0]+ "-" + data.split("-")[1] + "-" + data.split("-")[2]+ "-" + horario.split(":")[0]+ "-" + horario.split(":")[1]+ "-" + horario.split(":")[2];
-			calendar.set(Integer.parseInt(data.split("-")[0]), Integer.parseInt(data.split("-")[1]), Integer.parseInt(data.split("-")[2]), Integer.parseInt(horario.split(":")[0]), Integer.parseInt(horario.split(":")[1]), Integer.parseInt(horario.split(":")[2]));
-			System.out.println(calendar.getTimeInMillis());
+		int ano = Integer.parseInt(data.split("-")[0]);
+		int mes = Integer.parseInt(data.split("-")[1]);
+		int dia = Integer.parseInt(data.split("-")[2]);
+		int hora = Integer.parseInt(horario.split(":")[0]);
+		int min = Integer.parseInt(horario.split(":")[1]);
+		int sec = Integer.parseInt(horario.split(":")[2]);
+			
+		calendar.set(ano, mes, dia, hora, min, sec);
+		Date date = calendar.getTime();
+		long aber = abertura.getTime();
+		Long fec = fechamento.getTime();
+		Long time = date.getTime();
+		if (aber < time && fec > time && validade.equals("Abertura da Porta OK")) {
+		    System.out.println(entrada + " --> " + "Valida");	
+		    return true;
+		}
+		else {
+			System.out.println(entrada + " --> " + "inValida");
+			return false;
 		}
 	}
+
 
 	private void tratandoFileNotFoundException() {
 		if (!f.exists()) {
